@@ -17,8 +17,8 @@
 
 #include <utility>
 
-#include "synchronizer/impl/synchronizer_impl.hpp"
 #include "ametsuchi/mutable_storage.hpp"
+#include "synchronizer/impl/synchronizer_impl.hpp"
 
 // TODO: 14-02-2018 Alexey Chernyshov remove this after relocation to
 // shared_model https://soramitsu.atlassian.net/browse/IR-903

@@ -18,8 +18,8 @@
 #include "validation/impl/chain_validator_impl.hpp"
 
 #include "ametsuchi/impl/postgres_wsv_query.hpp"
-#include "consensus/consensus_common.hpp"
 #include "ametsuchi/mutable_storage.hpp"
+#include "consensus/consensus_common.hpp"
 
 // TODO: 14-02-2018 Alexey Chernyshov remove this after relocation to
 // shared_model https://soramitsu.atlassian.net/browse/IR-903
