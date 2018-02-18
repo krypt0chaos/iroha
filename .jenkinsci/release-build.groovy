@@ -2,6 +2,7 @@
 
 def doReleaseBuild() {
 	def platform = sh(script: 'uname -m', returnStdout: true).trim()
+	// TODO: 
 	// TODO: replace Github pull path as soon as multiplatform support will be merged
 	// TODO: change docker release-build image such that could possibly build the release package
 	sh "curl -L -o /tmp/${env.GIT_COMMIT}/Dockerfile --create-dirs https://raw.githubusercontent.com/hyperledger/iroha/${env.GIT_COMMIT}/docker/develop/${platform}/Dockerfile"
