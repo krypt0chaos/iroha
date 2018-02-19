@@ -30,7 +30,7 @@ namespace iroha {
                    void(shared_model::detail::PolymorphicWrapper<
                         shared_model::interface::Query>));
       MOCK_METHOD0(queryNotifier,
-                   rxcpp::observable<shared_model::detail::PolymorphicWrapper<
+                   rxcpp::observable<std::shared_ptr<
                        shared_model::interface::QueryResponse>>());
     };
   }  // namespace torii
