@@ -18,6 +18,8 @@
 #ifndef IROHA_MUTABLE_STORAGE_HPP
 #define IROHA_MUTABLE_STORAGE_HPP
 
+#include <functional>
+
 namespace shared_model {
   namespace interface {
     class Block;
