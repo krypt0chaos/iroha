@@ -523,7 +523,7 @@ namespace iroha {
         return makeExecutionError("failed to insert account signatory");
       }
       return errorIfNot(commands.insertAccountRole(account.account_id,
-                                                   domain.value().default_role),
+                                                   domain.value()->defaultRole()),
                         "failed to insert account role");
     }
 

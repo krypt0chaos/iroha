@@ -16,6 +16,7 @@
  */
 
 #include <backend/protobuf/common_objects/account_asset.hpp>
+#include <builders/protobuf/common_objects/proto_domain_builder.hpp>
 #include <limits>
 
 #include "module/irohad/ametsuchi/ametsuchi_mocks.hpp"
@@ -98,8 +99,12 @@ class CommandValidateExecuteTest : public ::testing::Test {
             },
             [](expected::Error<std::shared_ptr<std::string>> &e) { FAIL(); });
 
-    default_domain.domain_id = domain_id;
-    default_domain.default_role = admin_role;
+    default_domain = std::shared_ptr<shared_model::interface::Domain>(
+        shared_model::proto::DomainBuilder()
+            .domainId(domain_id)
+            .defaultRole(admin_role)
+            .build()
+            .copy());
   }
 
   ExecutionResult validateAndExecute() {
@@ -138,7 +143,7 @@ class CommandValidateExecuteTest : public ::testing::Test {
 
   std::vector<std::string> admin_roles = {admin_role};
   std::vector<std::string> role_permissions;
-  model::Domain default_domain;
+  std::shared_ptr<shared_model::interface::Domain> default_domain;
 
   std::shared_ptr<MockWsvQuery> wsv_query;
   std::shared_ptr<MockWsvCommand> wsv_command;
@@ -1471,11 +1476,12 @@ TEST_F(TransferAssetTest, InvalidWhenWrongPrecisionDuringExecute) {
  */
 TEST_F(TransferAssetTest, InvalidWhenAmountOverflow) {
   auto max_balance = std::shared_ptr<shared_model::interface::Amount>(
-    shared_model::proto::AmountBuilder()
-    .intValue(std::numeric_limits<boost::multiprecision::uint256_t>::max())
-    .precision(2)
-    .build()
-    .copy());
+      shared_model::proto::AmountBuilder()
+          .intValue(
+              std::numeric_limits<boost::multiprecision::uint256_t>::max())
+          .precision(2)
+          .build()
+          .copy());
 
   src_wallet = std::shared_ptr<shared_model::interface::AccountAsset>(
       shared_model::proto::AccountAssetBuilder()
