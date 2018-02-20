@@ -67,6 +67,8 @@ namespace iroha {
         index->index(block);
       }
 
+      ~BlockQueryTransferTest() = default;
+
       std::unique_ptr<pqxx::nontransaction> transaction;
       std::unique_ptr<pqxx::lazyconnection> postgres_connection;
       std::vector<iroha::hash256_t> tx_hashes;

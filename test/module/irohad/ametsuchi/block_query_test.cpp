@@ -306,7 +306,6 @@ TEST_F(BlockQueryTest, GetBlocksFrom1) {
   ASSERT_TRUE(wrapper.validate());
 }
 
-
 /**
  * @given block store with 2 blocks totally containing 3 txs created by
  * user1@test AND 1 tx created by user2@test. Block #1 is filled with trash data

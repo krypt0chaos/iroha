@@ -114,8 +114,10 @@ namespace iroha {
         return boost::none;
       }
 
+      auto last_id = total_blocks == 0u ? 0u : total_blocks - 1;
+
       return std::unique_ptr<FlatFile>(
-          new FlatFile(std::move(db), path, total_blocks));
+          new FlatFile(std::move(db), path, last_id));
     }
 
     const std::string &FlatFile::directory() const {
@@ -123,11 +125,6 @@ namespace iroha {
     }
 
     bool FlatFile::add(Identifier id, const std::vector<uint8_t> &blob) {
-      if (current_id_ + 1 != id) {
-        log_->warn("add(): appending non-consecutive block");
-        return false;
-      }
-
       nudb::error_code ec;
       auto key = serialize_uint32(id);
       db_->insert(key.data(), blob.data(), blob.size(), ec);
@@ -168,6 +165,8 @@ namespace iroha {
       nudb::erase_file(db_->log_path(), ec2);
       nudb::erase_file(db_->key_path(), ec3);
 
+      current_id_.store(0);
+
       return not(ec1 or ec2 or ec3);
     }
 
@@ -180,6 +179,7 @@ namespace iroha {
 
       do {
         auto key = serialize_uint32(current);
+
         db.fetch(key.data(),
                  [&found_last, &current](const void *value, size_t size) {
                    // if we read 0 bytes, then there is no such key
@@ -192,6 +192,7 @@ namespace iroha {
                    current++;
                  },
                  ec);
+
         if (ec == nudb::error::key_not_found) {
           return current;
         } else if (ec) {
