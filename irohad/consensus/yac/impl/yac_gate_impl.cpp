@@ -65,7 +65,7 @@ namespace iroha {
           return rxcpp::observable<>::create<model::Block>(
               [this, commit_message](auto subscriber) {
                 const auto hash = getHash(commit_message.votes);
-                if (not hash.has_value()) {
+                if (not hash) {
                   log_->info("Invalid commit message, hashes are different");
                   subscriber.on_completed();
                   return;

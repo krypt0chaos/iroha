@@ -47,16 +47,16 @@ namespace iroha {
           }
           auto document =
               model::converters::stringToJson(bytesToString(bytes.value()));
-          if (not document.has_value()) {
+          if (not document) {
             s.on_completed();
             return;
           }
           auto block = serializer_.deserialize(document.value());
-          if (not block.has_value()) {
+          if (not block) {
             s.on_completed();
             return;
           }
-          s.on_next(block.value());
+          s.on_next(*block);
           s.on_completed();
         });
       });

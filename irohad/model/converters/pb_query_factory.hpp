@@ -46,7 +46,7 @@ namespace iroha {
          * @param query - model query to serialize
          * @return nonstd::nullopt if no query type is found
          */
-        nonstd::optional<protocol::Query> serialize(
+        boost::optional<protocol::Query> serialize(
             std::shared_ptr<const model::Query> query) const;
 
         PbQueryFactory();

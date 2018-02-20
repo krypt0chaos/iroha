@@ -122,11 +122,11 @@ int main(int argc, char *argv[]) {
                       std::istreambuf_iterator<char>());
       iroha::model::converters::JsonTransactionFactory serializer;
       auto doc = iroha::model::converters::stringToJson(str);
-      if (not doc.has_value()) {
+      if (not doc) {
         logger->error("Json has wrong format.");
       }
       auto tx_opt = serializer.deserialize(doc.value());
-      if (not tx_opt.has_value()) {
+      if (not tx_opt) {
         logger->error("Json transaction has wrong format.");
       } else {
         response_handler.handle(client.sendTx(tx_opt.value()));
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
                       std::istreambuf_iterator<char>());
       iroha::model::converters::JsonQueryFactory serializer;
       auto query_opt = serializer.deserialize(std::move(str));
-      if (not query_opt.has_value()) {
+      if (not query_opt) {
         logger->error("Json has wrong format.");
       } else {
         response_handler.handle(client.sendQuery(query_opt.value()));

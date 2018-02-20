@@ -18,7 +18,7 @@
 #ifndef IROHA_SIMULATOR_HPP
 #define IROHA_SIMULATOR_HPP
 
-#include <nonstd/optional.hpp>
+#include <boost/optional.hpp>
 #include "ametsuchi/block_query.hpp"
 #include "ametsuchi/temporary_factory.hpp"
 #include "model/model_crypto_provider.hpp"
@@ -65,7 +65,7 @@ namespace iroha {
       logger::Logger log_;
 
       // last block
-      nonstd::optional<model::Block> last_block;
+      boost::optional<model::Block> last_block;
     };
   }  // namespace simulator
 }  // namespace iroha

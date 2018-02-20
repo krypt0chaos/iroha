@@ -164,9 +164,9 @@ TEST_F(ClientServerTest, SendTxWhenInvalidJson) {
         })";
   JsonTransactionFactory tx_factory;
   auto json_doc = stringToJson(json_string);
-  ASSERT_TRUE(json_doc.has_value());
-  auto model_tx = tx_factory.deserialize(json_doc.value());
-  ASSERT_FALSE(model_tx.has_value());
+  ASSERT_TRUE(json_doc);
+  auto model_tx = tx_factory.deserialize(*json_doc);
+  ASSERT_FALSE(model_tx);
 }
 
 TEST_F(ClientServerTest, SendTxWhenStatelessInvalid) {
@@ -207,7 +207,7 @@ TEST_F(ClientServerTest, SendQueryWhenInvalidJson) {
 
   JsonQueryFactory queryFactory;
   auto model_query = queryFactory.deserialize(json_query);
-  ASSERT_FALSE(model_query.has_value());
+  ASSERT_FALSE(model_query);
 }
 
 TEST_F(ClientServerTest, SendQueryWhenStatelessInvalid) {
@@ -231,9 +231,9 @@ TEST_F(ClientServerTest, SendQueryWhenStatelessInvalid) {
 
   JsonQueryFactory queryFactory;
   auto model_query = queryFactory.deserialize(json_query);
-  ASSERT_TRUE(model_query.has_value());
+  ASSERT_TRUE(model_query);
 
-  auto res = client.sendQuery(model_query.value());
+  auto res = client.sendQuery(*model_query);
   ASSERT_TRUE(res.status.ok());
   ASSERT_TRUE(res.answer.has_error_response());
   ASSERT_EQ(res.answer.error_response().reason(),
@@ -278,9 +278,9 @@ TEST_F(ClientServerTest, SendQueryWhenValid) {
 
   JsonQueryFactory queryFactory;
   auto model_query = queryFactory.deserialize(json_query);
-  ASSERT_TRUE(model_query.has_value());
+  ASSERT_TRUE(model_query);
 
-  auto res = client.sendQuery(model_query.value());
+  auto res = client.sendQuery(*model_query);
   ASSERT_EQ(res.answer.account_response().account().account_id(), "test@test");
 }
 
@@ -316,9 +316,9 @@ TEST_F(ClientServerTest, SendQueryWhenStatefulInvalid) {
 
   JsonQueryFactory queryFactory;
   auto model_query = queryFactory.deserialize(json_query);
-  ASSERT_TRUE(model_query.has_value());
+  ASSERT_TRUE(model_query);
 
-  auto res = client.sendQuery(model_query.value());
+  auto res = client.sendQuery(*model_query);
   ASSERT_TRUE(res.status.ok());
   ASSERT_TRUE(res.answer.has_error_response());
   ASSERT_EQ(res.answer.error_response().reason(),

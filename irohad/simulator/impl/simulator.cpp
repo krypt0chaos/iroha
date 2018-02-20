@@ -49,13 +49,13 @@ namespace iroha {
       // Get last block from local ledger
       block_queries_->getTopBlocks(1).as_blocking().subscribe(
           [this](auto block) { last_block = block; });
-      if (not last_block.has_value()) {
+      if (not last_block) {
         log_->warn("Could not fetch last block");
         return;
       }
-      if (last_block.value().height + 1 != proposal.height) {
+      if ((*last_block).height + 1 != proposal.height) {
         log_->warn("Last block height: {}, proposal height: {}",
-                   last_block.value().height,
+                   (*last_block).height,
                    proposal.height);
         return;
       }

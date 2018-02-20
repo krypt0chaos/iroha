@@ -117,7 +117,7 @@ namespace iroha {
             return p(deserializeRolePermissionsResponse(
                 response.role_permissions_response()));
           default:
-            return nonstd::nullopt;
+            return boost::none;
         }
       }
 

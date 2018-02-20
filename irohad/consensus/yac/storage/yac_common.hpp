@@ -56,7 +56,7 @@ namespace iroha {
        * @param votes - collection with votes
        * @return hash, if collection has same proposal hash, otherwise nullopt
        */
-      nonstd::optional<ProposalHash> getProposalHash(
+      boost::optional<ProposalHash> getProposalHash(
           const std::vector<VoteMessage> &votes);
 
       /**
@@ -64,7 +64,7 @@ namespace iroha {
        * @param votes - collection with votes
        * @return hash, if collection elements have same hash, otherwise nullopt
        */
-      nonstd::optional<YacHash> getHash(const std::vector<VoteMessage> &votes);
+      boost::optional<YacHash> getHash(const std::vector<VoteMessage> &votes);
     }  // namespace yac
   }    // namespace consensus
 }  // namespace iroha
