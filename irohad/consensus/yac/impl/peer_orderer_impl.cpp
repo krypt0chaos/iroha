@@ -36,7 +36,7 @@ namespace iroha {
           std::vector<model::Peer> peers;
           std::transform(
               a.begin(), a.end(), std::back_inserter(peers), [](auto &peer) {
-                return *(peer->makeOldModel());
+                return *std::unique_ptr<iroha::model::Peer>(peer->makeOldModel());
               });
           return nonstd::make_optional(peers);
         };
@@ -50,8 +50,7 @@ namespace iroha {
           std::vector<model::Peer> peers;
           std::transform(
               a.begin(), a.end(), std::back_inserter(peers), [](auto &peer) {
-                return *(peer->
-                    makeOldModel());
+                return *std::unique_ptr<iroha::model::Peer>(peer->makeOldModel());
               });
           return nonstd::make_optional(peers);
         } | [&hash](auto peers) {

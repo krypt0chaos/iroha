@@ -147,7 +147,7 @@ nonstd::optional<iroha::model::Peer> BlockLoaderImpl::findPeer(
     return nonstd::nullopt;
   }
 
-  return *(*it)->makeOldModel();
+  return *std::unique_ptr<iroha::model::Peer>((*it)->makeOldModel());
 }
 
 proto::Loader::Stub &BlockLoaderImpl::getPeerStub(
