@@ -41,7 +41,7 @@ namespace iroha {
         if (document.HasParseError()) {
           return boost::none;
         }
-        return boost::make_optional(std::move(document));
+        return document;
       }
 
       std::string jsonToString(const Document &document) {
