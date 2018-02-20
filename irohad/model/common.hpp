@@ -20,7 +20,6 @@
 
 #include <memory>
 #include <boost/optional.hpp>
-#include <nonstd/optional.hpp>
 
 namespace iroha {
   namespace model {

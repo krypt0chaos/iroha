@@ -27,7 +27,6 @@
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
-#include <nonstd/optional.hpp>
 
 #include "common/byteutils.hpp"
 #include "model/block.hpp"

@@ -18,8 +18,6 @@
 #ifndef IROHA_PB_QUERY_RESPONSE_FACTORY_HPP
 #define IROHA_PB_QUERY_RESPONSE_FACTORY_HPP
 
-#include <nonstd/optional.hpp>
-
 #include "model/account_asset.hpp"
 #include "model/common.hpp"
 #include "model/queries/responses/account_assets_response.hpp"

@@ -19,7 +19,6 @@
 #define IROHA_PEER_ORDERER_IMPL_HPP
 
 #include <memory>
-#include <nonstd/optional.hpp>
 #include "consensus/yac/yac_peer_orderer.hpp"
 
 namespace iroha {

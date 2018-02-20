@@ -18,7 +18,6 @@
 #ifndef IROHA_YAC_COMMON_HPP
 #define IROHA_YAC_COMMON_HPP
 
-#include <nonstd/optional.hpp>
 #include <vector>
 
 #include "consensus/yac/yac_hash_provider.hpp"  // for YacHash::proposal_hash

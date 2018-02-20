@@ -32,7 +32,6 @@ add_library(yac
     )
 target_link_libraries(yac
     rxcpp
-    optional
     yac_grpc
     logger
     hash
