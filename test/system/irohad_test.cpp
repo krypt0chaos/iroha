@@ -32,14 +32,14 @@ using iroha::operator|;
 
 class IrohadTest : public testing::Test {
  public:
-  virtual void SetUp() {
+  void SetUp() override {
     timeout = 1s;
     setPaths();
     auto config = parse_iroha_config(path_config_.string());
     blockstore_path_ = config[config_members::BlockStorePath].GetString();
     pgopts_ = config[config_members::PgOpt].GetString();
   }
-  virtual void TearDown() {
+  void TearDown() override {
     iroha::remove_all(blockstore_path_);
     dropPostgres();
   }
