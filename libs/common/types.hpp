@@ -141,10 +141,10 @@ namespace iroha {
    * operator| is used since it has to be binary and left-associative
    * Non-void returning specialization
    *
-   * nonstd::optional<int> f();
-   * nonstd::optional<double> g(int);
+   * boost::optional<int> f();
+   * boost::optional<double> g(int);
    *
-   * nonstd::optional<double> d = f()
+   * boost::optional<double> d = f()
    *    | g;
    *
    * @tparam T - monadic type

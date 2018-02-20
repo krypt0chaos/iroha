@@ -106,7 +106,7 @@ namespace iroha {
       auto wsv_transaction =
           std::make_unique<pqxx::nontransaction>(*postgres_connection, kTmpWsv);
 
-      nonstd::optional<hash256_t> top_hash;
+      boost::optional<hash256_t> top_hash;
 
       blocks_->getTopBlocks(1)
           .subscribe_on(rxcpp::observe_on_new_thread())
@@ -115,7 +115,7 @@ namespace iroha {
 
       return expected::makeValue<std::unique_ptr<MutableStorage>>(
           std::make_unique<MutableStorageImpl>(
-              top_hash.value_or(hash256_t{}),
+              top_hash.get_value_or(hash256_t{}),
               std::move(postgres_connection),
               std::move(wsv_transaction),
               std::move(command_executors.value())));
