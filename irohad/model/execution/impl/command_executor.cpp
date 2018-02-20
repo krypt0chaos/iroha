@@ -87,14 +87,14 @@ namespace iroha {
       auto role_permissions = queries.getRolePermissions(cmd_value.role_name);
       auto account_roles = queries.getAccountRoles(creator_account_id);
 
-      if (not role_permissions.has_value() or not account_roles.has_value()) {
+      if (not role_permissions or not account_roles) {
         return false;
       }
 
       std::set<std::string> account_permissions;
       for (const auto &role : *account_roles) {
         auto permissions = queries.getRolePermissions(role);
-        if (not permissions.has_value())
+        if (not permissions)
           continue;
         for (const auto &permission : *permissions)
           account_permissions.insert(permission);
@@ -267,7 +267,7 @@ namespace iroha {
       auto add_asset_quantity = static_cast<const AddAssetQuantity &>(command);
 
       auto asset = queries.getAsset(add_asset_quantity.asset_id);
-      if (not asset.has_value()) {
+      if (not asset) {
         return makeExecutionResult(
             (boost::format("asset %s is absent") % add_asset_quantity.asset_id)
                 .str());
@@ -281,14 +281,14 @@ namespace iroha {
                 .str());
       }
 
-      if (not queries.getAccount(add_asset_quantity.account_id).has_value()) {
+      if (not queries.getAccount(add_asset_quantity.account_id)) {
         return makeExecutionResult((boost::format("account %s is absent")
                                     % add_asset_quantity.account_id)
                                        .str());
       }
       auto account_asset = queries.getAccountAsset(
           add_asset_quantity.account_id, add_asset_quantity.asset_id);
-      if (not account_asset.has_value()) {
+      if (not account_asset) {
         account_asset = AccountAsset();
         account_asset->asset_id = add_asset_quantity.asset_id;
         account_asset->account_id = add_asset_quantity.account_id;
@@ -298,7 +298,7 @@ namespace iroha {
 
         auto new_balance =
             account_asset_value.balance + add_asset_quantity.amount;
-        if (not new_balance.has_value()) {
+        if (not new_balance) {
           return makeExecutionResult("amount overflows balance"s);
         }
         account_asset->balance = new_balance.value();
@@ -358,7 +358,7 @@ namespace iroha {
       }
       auto account_asset = queries.getAccountAsset(
           subtract_asset_quantity.account_id, subtract_asset_quantity.asset_id);
-      if (not account_asset.has_value()) {
+      if (not account_asset) {
         return makeExecutionResult((boost::format("account %s does not have %s")
                                     % subtract_asset_quantity.account_id
                                     % subtract_asset_quantity.asset_id)
@@ -368,7 +368,7 @@ namespace iroha {
 
       auto new_balance =
           account_asset_value.balance - subtract_asset_quantity.amount;
-      if (not new_balance.has_value()) {
+      if (not new_balance) {
         return makeExecutionResult("not sufficient amount"s);
       }
       account_asset->balance = new_balance.value();
@@ -487,7 +487,7 @@ namespace iroha {
       account.quorum = 1;
       account.json_data = "{}";
       auto domain = queries.getDomain(create_account.domain_id);
-      if (not domain.has_value()) {
+      if (not domain) {
         return makeExecutionResult(
             (boost::format("Domain %s not found") % create_account.domain_id)
                 .str());
@@ -663,7 +663,7 @@ namespace iroha {
       auto account = queries.getAccount(remove_signatory.account_id);
       auto signatories = queries.getSignatories(remove_signatory.account_id);
 
-      if (not(account.has_value() and signatories.has_value())) {
+      if (not(account and signatories)) {
         // No account or signatories found
         return false;
       }
@@ -728,7 +728,7 @@ namespace iroha {
       auto set_quorum = static_cast<const SetQuorum &>(command);
 
       auto account = queries.getAccount(set_quorum.account_id);
-      if (not account.has_value()) {
+      if (not account) {
         return makeExecutionResult(
             (boost::format("absent account %s") % set_quorum.account_id).str());
       }
@@ -758,7 +758,7 @@ namespace iroha {
       auto set_quorum = static_cast<const SetQuorum &>(command);
       auto signatories = queries.getSignatories(set_quorum.account_id);
 
-      if (not(signatories.has_value())) {
+      if (not(signatories)) {
         // No  signatories of an account found
         return false;
       }
@@ -781,7 +781,7 @@ namespace iroha {
 
       auto src_account_asset = queries.getAccountAsset(
           transfer_asset.src_account_id, transfer_asset.asset_id);
-      if (not src_account_asset.has_value()) {
+      if (not src_account_asset) {
         return makeExecutionResult((boost::format("asset %s is absent of %s")
                                     % transfer_asset.asset_id
                                     % transfer_asset.src_account_id)
@@ -792,7 +792,7 @@ namespace iroha {
       auto dest_account_asset = queries.getAccountAsset(
           transfer_asset.dest_account_id, transfer_asset.asset_id);
       auto asset = queries.getAsset(transfer_asset.asset_id);
-      if (not asset.has_value()) {
+      if (not asset) {
         return makeExecutionResult((boost::format("asset %s is absent of %s")
                                     % transfer_asset.asset_id
                                     % transfer_asset.dest_account_id)
@@ -807,7 +807,7 @@ namespace iroha {
       // Get src balance
       auto src_balance = src_account_asset.value().balance;
       auto new_src_balance = src_balance - transfer_asset.amount;
-      if (not new_src_balance.has_value()) {
+      if (not new_src_balance) {
         return makeExecutionResult(
             (boost::format("not enough assets on source account '%s'")
              % transfer_asset.src_account_id)
@@ -817,7 +817,7 @@ namespace iroha {
       // Set new balance for source account
       src_account_asset.value().balance = src_balance;
 
-      if (not dest_account_asset.has_value()) {
+      if (not dest_account_asset) {
         // This assert is new for this account - create new AccountAsset
         dest_AccountAsset = AccountAsset();
         dest_AccountAsset.asset_id = transfer_asset.asset_id;
@@ -832,7 +832,7 @@ namespace iroha {
         auto dest_balance = dest_account_asset.value().balance;
 
         auto new_dest_balance = dest_balance + transfer_asset.amount;
-        if (not new_dest_balance.has_value()) {
+        if (not new_dest_balance) {
           return makeExecutionResult(
               std::string("operation overflows destination balance"));
         }
@@ -883,7 +883,7 @@ namespace iroha {
       }
 
       auto asset = queries.getAsset(transfer_asset.asset_id);
-      if (not asset.has_value()) {
+      if (not asset) {
         return false;
       }
       // Amount is formed wrong
@@ -893,7 +893,7 @@ namespace iroha {
       auto account_asset = queries.getAccountAsset(
           transfer_asset.src_account_id, transfer_asset.asset_id);
 
-      return account_asset.has_value()
+      return account_asset
           // Check if dest account exist
           and queries.getAccount(transfer_asset.dest_account_id) and
           // Balance in your wallet should be at least amount of transfer

@@ -91,7 +91,7 @@ class TxPipelineIntegrationTestFixture
       const std::string &accountName) const {
     auto manager = iroha::KeysManagerImpl(accountName);
     EXPECT_TRUE(manager.createKeys());
-    EXPECT_TRUE(manager.loadKeys().has_value());
+    EXPECT_TRUE(manager.loadKeys());
     return *manager.loadKeys();
   }
 

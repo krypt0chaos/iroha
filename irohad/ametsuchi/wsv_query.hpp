@@ -19,7 +19,7 @@
 #define IROHA_WSV_QUERY_HPP
 
 #include <common/types.hpp>
-#include <nonstd/optional.hpp>
+#include <boost/optional.hpp>
 #include <string>
 #include <vector>
 
@@ -59,7 +59,7 @@ namespace iroha {
        * @param domain_id - id in the system
        * @return Domain if exist, nullopt otherwise
        */
-      virtual nonstd::optional<model::Domain> getDomain(
+      virtual boost::optional<model::Domain> getDomain(
           const std::string &domain_id) = 0;
 
       /**
@@ -67,26 +67,26 @@ namespace iroha {
        * @param account_id
        * @return
        */
-      virtual nonstd::optional<std::vector<std::string>> getAccountRoles(
+      virtual boost::optional<std::vector<std::string>> getAccountRoles(
           const std::string &account_id) = 0;
       /**
        * Get all permissions of a role
        * @param role_name
        * @return
        */
-      virtual nonstd::optional<std::vector<std::string>> getRolePermissions(
+      virtual boost::optional<std::vector<std::string>> getRolePermissions(
           const std::string &role_name) = 0;
 
       /**
        * @return All roles currently in the system
        */
-      virtual nonstd::optional<std::vector<std::string>> getRoles() = 0;
+      virtual boost::optional<std::vector<std::string>> getRoles() = 0;
       /**
        * Get account by user account_id
        * @param account_id
        * @return
        */
-      virtual nonstd::optional<model::Account> getAccount(
+      virtual boost::optional<model::Account> getAccount(
           const std::string &account_id) = 0;
 
       /**
@@ -96,7 +96,7 @@ namespace iroha {
        * @param detail
        * @return
        */
-      virtual nonstd::optional<std::string> getAccountDetail(
+      virtual boost::optional<std::string> getAccountDetail(
           const std::string &account_id,
           const std::string &creator_account_id,
           const std::string &detail) = 0;
@@ -106,7 +106,7 @@ namespace iroha {
        * @param account_id
        * @return
        */
-      virtual nonstd::optional<std::vector<pubkey_t>> getSignatories(
+      virtual boost::optional<std::vector<pubkey_t>> getSignatories(
           const std::string &account_id) = 0;
 
       /**
@@ -114,7 +114,7 @@ namespace iroha {
        * @param asset_id
        * @return
        */
-      virtual nonstd::optional<model::Asset> getAsset(
+      virtual boost::optional<model::Asset> getAsset(
           const std::string &asset_id) = 0;
 
       /**
@@ -123,14 +123,14 @@ namespace iroha {
        * @param asset_id
        * @return
        */
-      virtual nonstd::optional<model::AccountAsset> getAccountAsset(
+      virtual boost::optional<model::AccountAsset> getAccountAsset(
           const std::string &account_id, const std::string &asset_id) = 0;
 
       /**
        *
        * @return
        */
-      virtual nonstd::optional<std::vector<model::Peer>> getPeers() = 0;
+      virtual boost::optional<std::vector<model::Peer>> getPeers() = 0;
     };
 
   }  // namespace ametsuchi

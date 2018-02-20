@@ -51,12 +51,12 @@ namespace iroha {
         log_->info(
             "vote for block ({}, {})", hash.proposal_hash, hash.block_hash);
         auto order = orderer_->getOrdering(hash);
-        if (not order.has_value()) {
+        if (not order) {
           log_->error("ordering doesn't provide peers => pass round");
           return;
         }
         current_block_ = std::make_pair(hash, block);
-        hash_gate_->vote(hash, order.value());
+        hash_gate_->vote(hash, *order);
       }
 
       rxcpp::observable<model::Block> YacGateImpl::on_commit() {
@@ -83,7 +83,7 @@ namespace iroha {
                 }
                 // node has voted for another block - load committed block
                 const auto model_hash =
-                    hash_provider_->toModelHash(hash.value());
+                    hash_provider_->toModelHash(*hash);
                 // iterate over peers who voted for the committed block
                 rxcpp::observable<>::iterate(commit_message.votes)
                     // allow other peers to apply commit
@@ -99,9 +99,9 @@ namespace iroha {
                                 shared_model::crypto::Hash(
                                     {model_hash.begin(), model_hash.end()}));
                             // if load is successful
-                            if (block.has_value()) {
+                            if (block) {
                               std::unique_ptr<iroha::model::Block> old_block(
-                                  block.value()->makeOldModel());
+                                      (*block)->makeOldModel());
                               subscriber.on_next(*old_block);
                             }
                             subscriber.on_completed();

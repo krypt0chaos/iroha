@@ -20,7 +20,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <cstdint>
-#include <nonstd/optional.hpp>
+#include <boost/optional.hpp>
 #include <string>
 
 namespace iroha {
@@ -76,7 +76,7 @@ namespace iroha {
     uint256_t getIntValue();
     uint8_t getPrecision();
 
-    static nonstd::optional<Amount> createFromString(std::string str_amount);
+    static boost::optional<Amount> createFromString(std::string str_amount);
 
     /**
      * Takes percentage from current amount
@@ -101,16 +101,16 @@ namespace iroha {
      * @param b right term
      * @param optional result
      */
-    friend nonstd::optional<Amount> operator+(nonstd::optional<Amount> a,
-                                              nonstd::optional<Amount> b) {
+    friend boost::optional<Amount> operator+(boost::optional<Amount> a,
+                                             boost::optional<Amount> b) {
       // check precisions
       if (a->precision_ != b->precision_) {
-        return nonstd::nullopt;
+        return boost::none;
       }
       auto res = a->add(*b);
       // check overflow
       if (res.value_ < a->value_ or res.value_ < b->value_) {
-        return nonstd::nullopt;
+        return boost::none;
       }
       return res;
     }
@@ -123,15 +123,15 @@ namespace iroha {
      * @param b right term
      * @param optional result
      */
-    friend nonstd::optional<Amount> operator-(nonstd::optional<Amount> a,
-                                              nonstd::optional<Amount> b) {
+    friend boost::optional<Amount> operator-(boost::optional<Amount> a,
+                                             boost::optional<Amount> b) {
       // check precisions
       if (a->precision_ != b->precision_) {
-        return nonstd::nullopt;
+        return boost::none;
       }
       // check if a greater than b
       if (a->value_ < b->value_) {
-        return nonstd::nullopt;
+        return boost::none;
       }
       return a->subtract(*b);
     }

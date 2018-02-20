@@ -21,6 +21,7 @@
 #include <regex>
 #include <utility>
 
+
 namespace iroha {
 
   // to raise to power integer values
@@ -95,11 +96,11 @@ namespace iroha {
     return *this;
   }
 
-  nonstd::optional<Amount> Amount::createFromString(std::string str_amount) {
+  boost::optional<Amount> Amount::createFromString(std::string str_amount) {
     // check if valid number
     std::regex e("([0-9]*\\.[0-9]+|[0-9]+)");
     if (!std::regex_match(str_amount, e)) {
-      return nonstd::nullopt;
+      return boost::none;
     }
 
     // get precision

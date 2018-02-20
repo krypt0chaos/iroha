@@ -66,7 +66,7 @@ namespace iroha {
     expected::Result<std::unique_ptr<TemporaryWsv>, std::string>
     StorageImpl::createTemporaryWsv() {
       auto command_executors = model::CommandExecutorFactory::create();
-      if (not command_executors.has_value()) {
+      if (not command_executors) {
         return expected::makeError(kCommandExecutorError);
       }
 
@@ -91,7 +91,7 @@ namespace iroha {
     expected::Result<std::unique_ptr<MutableStorage>, std::string>
     StorageImpl::createMutableStorage() {
       auto command_executors = model::CommandExecutorFactory::create();
-      if (not command_executors.has_value()) {
+      if (not command_executors) {
         return expected::makeError(kCommandExecutorError);
       }
 

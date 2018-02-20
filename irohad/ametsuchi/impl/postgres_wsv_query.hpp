@@ -27,27 +27,27 @@ namespace iroha {
     class PostgresWsvQuery : public WsvQuery {
      public:
       explicit PostgresWsvQuery(pqxx::nontransaction &transaction);
-      nonstd::optional<std::vector<std::string>> getAccountRoles(
+      boost::optional<std::vector<std::string>> getAccountRoles(
           const std::string &account_id) override;
 
-      nonstd::optional<std::vector<std::string>> getRolePermissions(
+      boost::optional<std::vector<std::string>> getRolePermissions(
           const std::string &role_name) override;
 
-      nonstd::optional<model::Account> getAccount(
+      boost::optional<model::Account> getAccount(
           const std::string &account_id) override;
-      nonstd::optional<std::string> getAccountDetail(
+      boost::optional<std::string> getAccountDetail(
           const std::string &account_id,
           const std::string &creator_account_id,
           const std::string &detail) override;
-      nonstd::optional<std::vector<pubkey_t>> getSignatories(
+      boost::optional<std::vector<pubkey_t>> getSignatories(
           const std::string &account_id) override;
-      nonstd::optional<model::Asset> getAsset(
+      boost::optional<model::Asset> getAsset(
           const std::string &asset_id) override;
-      nonstd::optional<model::AccountAsset> getAccountAsset(
+      boost::optional<model::AccountAsset> getAccountAsset(
           const std::string &account_id, const std::string &asset_id) override;
-      nonstd::optional<std::vector<model::Peer>> getPeers() override;
-      nonstd::optional<std::vector<std::string>> getRoles() override;
-      nonstd::optional<model::Domain> getDomain(
+      boost::optional<std::vector<model::Peer>> getPeers() override;
+      boost::optional<std::vector<std::string>> getRoles() override;
+      boost::optional<model::Domain> getDomain(
           const std::string &domain_id) override;
       bool hasAccountGrantablePermission(
           const std::string &permitee_account_id,

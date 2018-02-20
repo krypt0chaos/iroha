@@ -34,22 +34,21 @@ namespace iroha {
         ametsuchi::TemporaryWsv &temporaryWsv) {
       log_->info("transactions in proposal: {}", proposal.transactions.size());
       auto checking_transaction = [this](auto &tx, auto &queries) {
-        return (queries.getAccount(tx.creator_account_id) |
+        return bool(queries.getAccount(tx.creator_account_id) |
                 [&](const auto &account) {
                   // Check if tx creator has account and has quorum to execute
                   // transaction
                   return tx.signatures.size() >= account.quorum
                       ? queries.getSignatories(tx.creator_account_id)
-                      : nonstd::nullopt;
+                      : boost::none;
                 }
                 |
                 [&](const auto &signatories) {
                   // Check if signatures in transaction are account signatory
                   return this->signaturesSubset(tx.signatures, signatories)
-                      ? nonstd::make_optional(signatories)
-                      : nonstd::nullopt;
-                })
-            .has_value();
+                      ? boost::make_optional(signatories)
+                      : boost::none;
+                });
       };
 
       // Filter only valid transactions

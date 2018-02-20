@@ -195,8 +195,8 @@ TEST_F(BlockLoaderTest, ValidWhenBlockPresent) {
       .WillOnce(Return(rxcpp::observable<>::just(*old_requested)));
   auto block = loader->retrieveBlock(peer_key, requested.hash());
 
-  ASSERT_TRUE(block.has_value());
-  ASSERT_EQ(*block.value().operator->(), requested);
+  ASSERT_TRUE(block);
+  ASSERT_EQ(*(*block).operator->(), requested);
 }
 
 /**
@@ -214,5 +214,5 @@ TEST_F(BlockLoaderTest, ValidWhenBlockMissing) {
       .WillOnce(Return(rxcpp::observable<>::just(*old_present)));
   auto block = loader->retrieveBlock(peer_key, Hash(std::string(32, '0')));
 
-  ASSERT_FALSE(block.has_value());
+  ASSERT_FALSE(block);
 }

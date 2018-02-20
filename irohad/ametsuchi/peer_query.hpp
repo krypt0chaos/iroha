@@ -19,7 +19,7 @@
 #define IROHA_PEER_QUERY_HPP
 
 #include <memory>
-#include <nonstd/optional.hpp>
+#include <boost/optional.hpp>
 #include <vector>
 
 namespace iroha {
@@ -39,7 +39,7 @@ namespace iroha {
        * Fetch peers stored in ledger
        * @return list of peers in insertion to ledger order
        */
-      virtual nonstd::optional<std::vector<model::Peer>> getLedgerPeers() = 0;
+      virtual boost::optional<std::vector<model::Peer>> getLedgerPeers() = 0;
 
       virtual ~PeerQuery() = default;
     };

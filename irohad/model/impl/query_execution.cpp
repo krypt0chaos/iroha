@@ -60,19 +60,19 @@ bool hasQueryPermission(const std::string &creator,
        and wsv_query.hasAccountGrantablePermission(
                creator, target_account, indiv_permission_id))
       or  // ----- Creator has role permission ---------
-      (perms_set.has_value()
+      (perms_set
        and (
                // 2. Creator want to query his account, must have role
                // permission
                (creator == target_account
-                and accountHasPermission(perms_set.value(),
+                and accountHasPermission(*perms_set,
                                          indiv_permission_id))
                or  // 3. Creator has global permission to get any account
-               (accountHasPermission(perms_set.value(),
+               (accountHasPermission(*perms_set,
                                      all_permission_id))
                or  // 4. Creator has domain permission
                (getDomainFromName(creator) == getDomainFromName(target_account)
-                and accountHasPermission(perms_set.value(),
+                and accountHasPermission(*perms_set,
                                          domain_permission_id))));
 }
 
@@ -167,14 +167,14 @@ bool QueryProcessingFactory::validate(const model::GetTransactions &query) {
 std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetAssetInfo(
     const model::GetAssetInfo &query) {
   auto ast = _wsvQuery->getAsset(query.asset_id);
-  if (!ast.has_value()) {
+  if (not ast) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = ErrorResponse::NO_ASSET;
     return std::make_shared<ErrorResponse>(response);
   }
   AssetResponse response;
-  response.asset = std::move(ast.value());
+  response.asset = std::move(*ast);
   response.query_hash = iroha::hash(query);
   return std::make_shared<AssetResponse>(response);
 }
@@ -182,7 +182,7 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetAssetInfo(
 std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetRoles(
     const model::GetRoles &query) {
   auto roles = _wsvQuery->getRoles();
-  if (not roles.has_value()) {
+  if (not roles) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = ErrorResponse::NO_ROLES;
@@ -190,7 +190,7 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetRoles(
   }
   RolesResponse response;
   response.query_hash = iroha::hash(query);
-  response.roles = std::move(roles.value());
+  response.roles = std::move(*roles);
   return std::make_shared<RolesResponse>(response);
 }
 
@@ -198,7 +198,7 @@ std::shared_ptr<QueryResponse>
 QueryProcessingFactory::executeGetRolePermissions(
     const model::GetRolePermissions &query) {
   auto perm = _wsvQuery->getRolePermissions(query.role_id);
-  if (not perm.has_value()) {
+  if (not perm) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = ErrorResponse::NO_ROLES;
@@ -206,7 +206,7 @@ QueryProcessingFactory::executeGetRolePermissions(
   }
   RolePermissionsResponse response;
   response.query_hash = iroha::hash(query);
-  response.role_permissions = std::move(perm.value());
+  response.role_permissions = std::move(*perm);
   return std::make_shared<RolePermissionsResponse>(response);
 }
 
@@ -214,7 +214,7 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetAccount(
     const model::GetAccount &query) {
   auto acc = _wsvQuery->getAccount(query.account_id);
   auto roles = _wsvQuery->getAccountRoles(query.account_id);
-  if (not acc.has_value() or not roles.has_value()) {
+  if (not acc or not roles) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = ErrorResponse::NO_ACCOUNT;
@@ -222,8 +222,8 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetAccount(
   }
 
   AccountResponse response;
-  response.account = acc.value();
-  response.roles = roles.value();
+  response.account = *acc;
+  response.roles = *roles;
   response.query_hash = iroha::hash(query);
   return std::make_shared<AccountResponse>(response);
 }
@@ -232,14 +232,14 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetAccountAssets(
     const model::GetAccountAssets &query) {
   auto acct_asset =
       _wsvQuery->getAccountAsset(query.account_id, query.asset_id);
-  if (!acct_asset.has_value()) {
+  if (not acct_asset) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = ErrorResponse::NO_ACCOUNT_ASSETS;
     return std::make_shared<ErrorResponse>(response);
   }
   AccountAssetResponse response;
-  response.acct_asset = acct_asset.value();
+  response.acct_asset = *acct_asset;
   response.query_hash = iroha::hash(query);
   return std::make_shared<AccountAssetResponse>(response);
 }
@@ -249,14 +249,14 @@ iroha::model::QueryProcessingFactory::executeGetAccountDetail(
     const model::GetAccountDetail &query) {
   auto acct_detail = _wsvQuery->getAccountDetail(
       query.account_id, query.creator_account_id, query.detail);
-  if (!acct_detail.has_value()) {
+  if (not acct_detail) {
     iroha::model::ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = iroha::model::ErrorResponse::NO_ACCOUNT_DETAIL;
     return std::make_shared<iroha::model::ErrorResponse>(response);
   }
   iroha::model::AccountDetailResponse response;
-  response.detail = acct_detail.value();
+  response.detail = *acct_detail;
   response.query_hash = iroha::hash(query);
   return std::make_shared<iroha::model::AccountDetailResponse>(response);
 }
@@ -301,7 +301,7 @@ iroha::model::QueryProcessingFactory::executeGetTransactions(
 std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetSignatories(
     const model::GetSignatories &query) {
   auto signs = _wsvQuery->getSignatories(query.account_id);
-  if (!signs.has_value()) {
+  if (not signs) {
     ErrorResponse response;
     response.query_hash = iroha::hash(query);
     response.reason = model::ErrorResponse::NO_SIGNATORIES;
@@ -309,7 +309,7 @@ std::shared_ptr<QueryResponse> QueryProcessingFactory::executeGetSignatories(
   }
   SignatoriesResponse response;
   response.query_hash = iroha::hash(query);
-  response.keys = signs.value();
+  response.keys = *signs;
   return std::make_shared<SignatoriesResponse>(response);
 }
 

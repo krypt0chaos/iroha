@@ -158,13 +158,13 @@ int main(int argc, char *argv[]) {
       return EXIT_FAILURE;
     }
     iroha::KeysManagerImpl manager((path / FLAGS_account_name).string());
-    nonstd::optional<iroha::keypair_t> keypair;
+    boost::optional<iroha::keypair_t> keypair;
     if (FLAGS_pass_phrase.size() != 0) {
       keypair = manager.loadKeys(FLAGS_pass_phrase);
     } else {
       keypair = manager.loadKeys();
     }
-    if (not keypair.has_value()) {
+    if (not keypair) {
       logger->error(
           "Cannot load specified keypair, or keypair is invalid. Path: {}, "
           "keypair name: {}. Use --key_path to path to your keypair. \nMaybe wrong pass phrase (\"{}\")?",
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
         0,
         0,
         std::make_shared<iroha::model::ModelCryptoProviderImpl>(
-            keypair.value()));
+            *keypair));
     interactiveCli.run();
   } else {
     logger->error("Invalid flags");
