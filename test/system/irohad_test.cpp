@@ -104,7 +104,6 @@ DROP TABLE IF EXISTS index_by_id_height_asset;
  public:
   boost::filesystem::path irohad_executable;
   std::chrono::milliseconds timeout = 1s;
-  std::chrono::milliseconds short_timeout = 100ms;
 
  private:
   boost::filesystem::path path_irohad_;
@@ -115,17 +114,6 @@ DROP TABLE IF EXISTS index_by_id_height_asset;
   std::string pgopts_;
   std::string blockstore_path_;
 };
-
-/*
- * @given path to irohad executable
- * @when run irohad with invalid parameters
- * @then irohad should not start
- */
-TEST_F(IrohadTest, RunIrohadWithInvalidArgs) {
-  child c(irohad_executable.string() + " --invalid");
-  std::this_thread::sleep_for(short_timeout);
-  ASSERT_FALSE(c.running());
-}
 
 /*
  * @given path to irohad executable and paths to files irohad is needed to be
