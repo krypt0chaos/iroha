@@ -34,7 +34,7 @@ jobs:
             ccache --show-stats
             ccache --zero-stats
             # debug/coverage builds produce 2G cache
-            ccache --max-size=5G
+            ccache --max-size=2G
       - run:
           name: cmake
           command: >
@@ -111,7 +111,7 @@ jobs:
       - run:
           name: make and package
           command: |
-            cmake --build $IROHA_BUILD --target package -- -j4
+            cmake --build $IROHA_BUILD --target package -- -j$(nproc --all)
       - run: ccache --show-stats
       - save_cache:
           key: build-linux-release-{{ arch }}-{{ .Branch }}-{{ epoch }}
@@ -305,7 +305,7 @@ jobs:
       - run:
           name: make
           command: |
-            cmake --build build --target package -- -j4
+            cmake --build build --target package -- -j$(sysctl -n hw.ncpu)
       - run: ccache --show-stats
       - save_cache:
           key: build-mac-release-{{ arch }}-{{ .Branch }}-{{ epoch }}
