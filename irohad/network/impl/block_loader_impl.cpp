@@ -51,7 +51,7 @@ rxcpp::observable<Wrapper<Block>> BlockLoaderImpl::retrieveBlocks(
     const PublicKey &peer_pubkey) {
   return rxcpp::observable<>::create<Wrapper<Block>>([this, peer_pubkey](
                                                          auto subscriber) {
-    nonstd::optional<iroha::model::Block> top_block;
+    boost::optional<iroha::model::Block> top_block;
     block_query_->getTopBlocks(1)
         .subscribe_on(rxcpp::observe_on_new_thread())
         .as_blocking()

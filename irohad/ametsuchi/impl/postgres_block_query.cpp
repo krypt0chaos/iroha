@@ -41,7 +41,7 @@ namespace iroha {
       return rxcpp::observable<>::range(height, to).flat_map([this](auto i) {
         auto bytes = block_store_.get(i);
         return rxcpp::observable<>::create<model::Block>([this, bytes](auto s) {
-          if (not bytes.has_value()) {
+          if (not bytes) {
             s.on_completed();
             return;
           }

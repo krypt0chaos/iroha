@@ -23,7 +23,6 @@
 #include <cmath>
 #include <shared_mutex>
 
-#include <nonstd/optional.hpp>
 #include <pqxx/pqxx>
 #include "logger/logger.hpp"
 #include "model/converters/json_block_factory.hpp"

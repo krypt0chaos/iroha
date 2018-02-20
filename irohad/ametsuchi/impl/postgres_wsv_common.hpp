@@ -50,7 +50,7 @@ namespace iroha {
      * will be refactored to return result
      * @param transaction on which to apply statement.
      * @param logger is used to report an error.
-     * @return nonstd::optional with pqxx::result in successful case, or nullopt
+     * @return boost::optional with pqxx::result in successful case, or nullopt
      * if exception was caught
      */
     inline auto makeExecuteOptional(pqxx::nontransaction &transaction,

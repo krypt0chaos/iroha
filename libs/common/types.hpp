@@ -170,7 +170,7 @@ namespace iroha {
    * operator| is used since it has to be binary and left-associative
    * Void specialization
    *
-   * nonstd::optional<int> f();
+   * boost::optional<int> f();
    * void g(int);
    *
    * f() | g;

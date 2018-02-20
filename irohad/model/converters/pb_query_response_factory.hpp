@@ -41,7 +41,7 @@ namespace iroha {
        */
       class PbQueryResponseFactory {
        public:
-        nonstd::optional<protocol::QueryResponse> serialize(
+        boost::optional<protocol::QueryResponse> serialize(
             const std::shared_ptr<QueryResponse> query_response) const;
         optional_ptr<QueryResponse> deserialize(
             const protocol::QueryResponse &query_response) const;

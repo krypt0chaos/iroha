@@ -86,7 +86,7 @@ namespace iroha {
     return [=](auto keypair) mutable {
       return hexstringToBytestring(s) |
           [&](auto binstr) {
-            return nonstd::make_optional(decrypt(binstr, pass_phrase));
+            return boost::make_optional(decrypt(binstr, pass_phrase));
           }
       | stringToBlob<size> | assignObjectField(keypair, &keypair_t::privkey);
     };
