@@ -468,9 +468,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
   ASSERT_TRUE(storage);
   auto wsv = storage->getWsvQuery();
 
-  iroha::pubkey_t pubkey1, pubkey2;
-  pubkey1.at(0) = 1;
-  pubkey2.at(0) = 2;
+  shared_model::interface::types::PubkeyType pubkey1(std::string(32, '1')), pubkey2(std::string(32, '2'));
 
   auto user1id = "userone@domain";
   auto user2id = "usertwo@domain";
@@ -492,7 +490,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
   CreateAccount createAccount;
   createAccount.account_name = "userone";
   createAccount.domain_id = "domain";
-  createAccount.pubkey = pubkey1;
+  createAccount.pubkey = pubkey1.template makeOldModel<iroha::pubkey_t>();
   txn.commands.push_back(std::make_shared<CreateAccount>(createAccount));
 
   Block block;
@@ -524,7 +522,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
 
   auto addSignatory = AddSignatory();
   addSignatory.account_id = user1id;
-  addSignatory.pubkey = pubkey2;
+  addSignatory.pubkey = pubkey2.template makeOldModel<iroha::pubkey_t>();
   txn.commands.push_back(std::make_shared<AddSignatory>(addSignatory));
 
   block = Block();
@@ -555,7 +553,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
   createAccount = CreateAccount();
   createAccount.account_name = "usertwo";
   createAccount.domain_id = "domain";
-  createAccount.pubkey = pubkey1;  // same as user1's pubkey1
+  createAccount.pubkey = pubkey1.template makeOldModel<iroha::pubkey_t>();  // same as user1's pubkey1
   txn.commands.push_back(std::make_shared<CreateAccount>(createAccount));
 
   block = Block();
@@ -593,7 +591,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
 
   auto removeSignatory = RemoveSignatory();
   removeSignatory.account_id = user1id;
-  removeSignatory.pubkey = pubkey1;
+  removeSignatory.pubkey = pubkey1.template makeOldModel<iroha::pubkey_t>();
   txn.commands.push_back(std::make_shared<RemoveSignatory>(removeSignatory));
 
   block = Block();
@@ -629,7 +627,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
 
   addSignatory = AddSignatory();
   addSignatory.account_id = user2id;
-  addSignatory.pubkey = pubkey2;
+  addSignatory.pubkey = pubkey2.template makeOldModel<iroha::pubkey_t>();
   txn.commands.push_back(std::make_shared<AddSignatory>(addSignatory));
 
   auto seqQuorum = SetQuorum();
@@ -667,7 +665,7 @@ TEST_F(AmetsuchiTest, AddSignatoryTest) {
 
   removeSignatory = RemoveSignatory();
   removeSignatory.account_id = user2id;
-  removeSignatory.pubkey = pubkey2;
+  removeSignatory.pubkey = pubkey2.template makeOldModel<iroha::pubkey_t>();
   txn.commands.push_back(std::make_shared<RemoveSignatory>(removeSignatory));
 
   block = Block();

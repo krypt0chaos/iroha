@@ -44,9 +44,13 @@ namespace iroha {
                 }
                 |
                 [&](const auto &signatories) {
+                  std::vector<pubkey_t> old_keys(signatories.size());
+                  std::transform(signatories.begin(), signatories.end(), old_keys.begin(), [](auto key) {
+                    return key.template makeOldModel<pubkey_t>();
+                  });
                   // Check if signatures in transaction are account signatory
-                  return this->signaturesSubset(tx.signatures, signatories)
-                      ? nonstd::make_optional(signatories)
+                  return this->signaturesSubset(tx.signatures, old_keys)
+                      ? nonstd::make_optional(old_keys)
                       : nonstd::nullopt;
                 })
             .has_value();
