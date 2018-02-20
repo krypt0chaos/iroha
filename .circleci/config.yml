@@ -298,7 +298,7 @@ jobs:
           command: >
             cmake -H. -Bbuild \
               -DCOVERAGE=OFF \
-              -DTESTING=OFF \
+              -DTESTING=ON \
               -DPACKAGE_TGZ=ON \
               -DCMAKE_BUILD_TYPE=Release \
               -DIROHA_VERSION=$(eval echo "$IROHA_VERSION")
